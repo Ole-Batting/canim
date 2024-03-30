@@ -60,7 +60,6 @@ class TypeStream:
         print(self.out_path)
 
         self.code_string = read_py_file(self.in_path)
-        print(len(self.code_string))
 
     def run(self):
         self.animate()
