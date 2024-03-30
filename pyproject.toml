@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "canim"
+version = "0.1.0"
+description = ""
+authors = ["Ole-Batting <batting.ole@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pygments = "^2.17.2"
+tqdm = "^4.66.2"
+opencv-python = "4.8.1.78"
+numpy = "^1.26.4"
+pyyaml = "^6.0.1"
+pillow = "9.5.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
