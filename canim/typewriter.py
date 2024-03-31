@@ -49,11 +49,12 @@ class TypeStream:
     render_mode_to_method: dict
     tail: int
 
-    def __init__(self, in_path: str, out_folder: str, config: Config, tail: int = 0):
+    def __init__(self, in_path: str, out_folder: str, config: Config, tail: int = 0, cursor: str = chr(9612)):
         self.in_path = in_path
         self.out_folder = out_folder
         self.config = config
         self.tail = tail
+        self.cursor = cursor
 
         self.name = os.path.basename(self.in_path.replace('.', "_"))
         self.out_path = os.path.join(self.out_folder, self.name)
@@ -77,7 +78,7 @@ class TypeStream:
             sub_lines = sub_string.split('\n')
             if all([s == ' ' for s in sub_lines[-1]]) and sub_lines[-1] != "":
                 continue
-            code_image = syntax_highlighted_image(sub_string + chr(9612), self.config)
+            code_image = syntax_highlighted_image(sub_string + self.cursor, self.config)
             video_frame = self.center(code_image)
             video_writer.write(video_frame)
 
@@ -96,19 +97,23 @@ if __name__ == "__main__":
                         help="for quick prototyping")
     parser.add_argument("--set-width", type=int, default=None, help="overwrite em width")
     parser.add_argument("--tail", type=int, default=0, help="tail frames")
+    parser.add_argument("--cursor", type=int, default=0, help="which cursor symbol")
     args = parser.parse_args()
 
     cfg = load_config(args.config)
     if args.set_width is not None:
         cfg.em_width = args.set_width
 
+    cursor_symbol = ["|", chr(9612), chr(0x2395)]
+    kwargs = dict(out_folder=args.out_path, config=cfg, tail=args.tail, cursor=cursor_symbol[args.cursor])
+
     if os.path.isdir(args.in_path):
         for in_path in os.listdir(args.in_path):
             if in_path[0] == '_':
                 continue
             print(in_path)
-            typestream = TypeStream(in_path=os.path.join(args.in_path, in_path), out_folder=args.out_path, config=cfg, tail=args.tail)
-            typestream.run()
+            type_stream = TypeStream(in_path=os.path.join(args.in_path, in_path), **kwargs)
+            type_stream.run()
     else:
-        typestream = TypeStream(in_path=args.in_path, out_folder=args.out_path, config=cfg, tail=args.tail)
-        typestream.run()
+        type_stream = TypeStream(in_path=args.in_path, **kwargs)
+        type_stream.run()
