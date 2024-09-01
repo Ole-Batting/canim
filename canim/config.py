@@ -12,7 +12,7 @@ class Config:
     font_name: str = 'Menlo'
     font_size: int = 14
     theme: str = 'native'
-    em_width: int = 88
+    em_width: int = 100
     em_height: int = 36
 
     @property

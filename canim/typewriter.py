@@ -100,6 +100,8 @@ if __name__ == "__main__":
     parser.add_argument("--cursor", type=int, default=0, help="which cursor symbol")
     args = parser.parse_args()
 
+    skip_files = ".DS_Store"
+
     cfg = load_config(args.config)
     if args.set_width is not None:
         cfg.em_width = args.set_width
@@ -110,6 +112,8 @@ if __name__ == "__main__":
     if os.path.isdir(args.in_path):
         for in_path in os.listdir(args.in_path):
             if in_path[0] == '_':
+                continue
+            if in_path in skip_files:
                 continue
             print(in_path)
             type_stream = TypeStream(in_path=os.path.join(args.in_path, in_path), **kwargs)
